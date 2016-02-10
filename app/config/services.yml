@@ -3,6 +3,19 @@
 parameters:
 #    parameter_name: value
 
-services:
+services:            
+# Entity Repository
+    app.joke_factory:
+        class: AppBundle\Entity\JokeFactory
+
+    app.joke_gateway:
+        class: AppBundle\Entity\JokeGateway
+        factory: [ "@doctrine", getRepository]
+        arguments: [ "AppBundle:Joke" ]
+
+    app.joke_repository:
+        class: AppBundle\Entity\JokeRepository
+        arguments: [ "@app.joke_gateway", "@app.joke_factory" ]
+
     fos_user.doctrine_registry:
         alias: doctrine

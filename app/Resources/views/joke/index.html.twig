@@ -1,0 +1,9 @@
+{# empty Twig template #}
+<h1>Jokes</h1>
+
+<ul>
+    {% for joke in jokes %}
+        <li class="joke">{{ joke.joke }}</li>
+
+    {% endfor %}
+</ul>

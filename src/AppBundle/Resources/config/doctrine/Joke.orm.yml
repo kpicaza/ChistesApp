@@ -1,0 +1,25 @@
+AppBundle\Entity\Joke:
+    type:  entity
+    table: joke
+    repositoryClass: AppBundle\Entity\JokeGateway
+    id:
+        id:
+            type: integer
+            generator:
+                strategy: AUTO
+    fields:
+        joke:
+            type: text
+            length: 500
+        published:
+            type: boolean    
+            options:
+                default: false         
+        created_at:
+            type: datetime
+        updated_at:
+            type: datetime
+            nullable: true                       
+    lifecycleCallbacks:
+        prePersist: [ setCreatedAtValue ]
+        preUpdate: [ setUpdatedAtValue ]
