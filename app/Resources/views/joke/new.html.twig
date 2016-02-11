@@ -1,0 +1,7 @@
+{# empty Twig template #}
+
+<h1>Joke Form</h1>
+{{ form_start(form, { method: 'POST', action: path('app_jokes_create') } ) }}
+{{ form_rest(form) }}
+<button type="submit" id="joke_form_submit">Submit</button>
+{{ form_end(form) }}

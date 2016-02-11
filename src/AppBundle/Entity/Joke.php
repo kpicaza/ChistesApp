@@ -44,7 +44,12 @@ class Joke
     {
         $this->joke = $joke;
         $this->published = $published;
-        $this->created_at = new \DateTime();
+        $this->setCreatedAtValue();
+    }
+
+    public static function fromArray(array $params)
+    {
+        return new Joke($params['joke'], (bool) $params['published']);
     }
 
     /**

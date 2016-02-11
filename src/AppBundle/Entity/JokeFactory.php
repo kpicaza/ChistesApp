@@ -9,16 +9,12 @@ class JokeFactory
 {
 
     public function makeOne(Joke $rawJoke)
-    {
+    {   
         return $this->make($rawJoke);
     }
 
     public function makeAll(array $rawJokes = null)
     {
-        if (null === $rawJokes) {
-            return array();
-        }
-
         foreach ($rawJokes as $rawJoke) {
             $jokes[$rawJoke->getId()] = $this->make($rawJoke);
         }
