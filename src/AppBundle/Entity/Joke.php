@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * Joke
  */
 class Joke
 {
@@ -47,6 +47,11 @@ class Joke
         $this->setCreatedAtValue();
     }
 
+    /**
+     * 
+     * @param array $params
+     * @return \AppBundle\Entity\Joke
+     */
     public static function fromArray(array $params)
     {
         return new Joke($params['joke'], (bool) $params['published']);

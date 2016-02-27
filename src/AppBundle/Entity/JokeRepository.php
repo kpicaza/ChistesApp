@@ -90,4 +90,11 @@ class JokeRepository
         
     }
 
+    /**
+     * 
+     */
+    public function update()
+    {
+        $this->gateway->update();
+    }
 }

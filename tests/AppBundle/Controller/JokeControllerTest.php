@@ -96,4 +96,63 @@ class JokeControllerTest extends WebTestCase
         $this->assertEquals(1, $crawler->filter('#joke_form_submit')->count(), 'Expect submit button');
     }
     
+
+    public function testJokeEdit()
+    {
+        $client = $this->createClient();
+
+        $crawler = $client->request('GET', '/jokes/' . self::ID . '/edit');
+
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Expect Succesfull HTTP request');
+
+        $this->assertEquals(1, $crawler->filter('#joke_form_joke')->count(), 'Expect Joke input');
+        $this->assertEquals(1, $crawler->filter('#joke_form_published')->count(), 'Expect publish input');
+        $this->assertEquals(1, $crawler->filter('#joke_form_submit')->count(), 'Expect submit button');
+    }
+    
+    public function testJokeUpdateWithValidValues()
+    {
+        $client = $this->createClient();
+
+        $crawler = $client->request('GET', '/jokes/' . self::ID . '/edit');
+
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Expect Succesfull HTTP request');
+
+        $form = $crawler->selectButton('Submit')->form();
+
+        $form['joke_form[joke]'] = self::JOKE;
+        $form['joke_form[published]']->untick();
+
+        $client->submit($form);
+
+        $this->assertTrue($client->getResponse()->isRedirect());
+        $client->followRedirect();
+        
+        $this->assertContains(
+            self::JOKE, $client->getResponse()->getContent()
+        );
+    }
+
+    public function testJokeUpdateWithInvalidValues()
+    {
+        $client = $this->createClient();
+
+        $crawler = $client->request('GET', '/jokes/' . self::ID .'/edit');
+
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Expect Succesfull HTTP request');
+
+        $form = $crawler->selectButton('Submit')->form();
+
+        $form['joke_form[joke]'] = self::NEW_JOKE;
+        $form['joke_form[published]']->tick();
+        $form['joke_form[_token]'] = 'sdafasdfasfdas';
+
+        $client->submit($form);
+        
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Expect Succesfull HTTP request');
+        $this->assertEquals(1, $crawler->filter('#joke_form_joke')->count(), 'Expect Joke input');
+        $this->assertEquals(1, $crawler->filter('#joke_form_published')->count(), 'Expect publish input');
+        $this->assertEquals(1, $crawler->filter('#joke_form_submit')->count(), 'Expect submit button');
+    }
+    
 }

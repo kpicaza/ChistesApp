@@ -8,6 +8,7 @@ class JokeObject
 {
 
     /**
+     * 
      * @var string
      * 
      * @Assert\NotBlank()
@@ -19,6 +20,7 @@ class JokeObject
     private $joke;
 
     /**
+     * 
      * @var boolean
      * 
      * @Assert\Range(
@@ -30,32 +32,58 @@ class JokeObject
      */
     private $published = false;
 
+    /**
+     * 
+     * @param string $joke
+     * @param boolean $publish
+     */
     public function __construct($joke = null, $publish = false)
     {
         $this->joke = $joke;
         $this->published = (bool) $publish;
     }
 
+    /**
+     * 
+     * @param array $params
+     * @return \AppBundle\Model\JokeObject
+     */
     public static function fromArray(array $params)
     {
         return new JokeObject($params['joke'], (bool) $params['published']);
     }
 
+    /**
+     * 
+     * @return string
+     */
     public function getJoke()
     {
         return $this->joke;
     }
 
+    /**
+     * 
+     * @param string $joke
+     */
     public function setJoke($joke)
     {
         $this->joke = $joke;
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function getPublished()
     {
         return (bool) $this->published;
     }
 
+    /**
+     * 
+     * @param int|boolean $published
+     */
     public function setPublished($published)
     {
         $this->published = (bool) $published;

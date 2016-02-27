@@ -23,4 +23,11 @@ class JokeGateway extends EntityRepository
         return $joke;
     }
 
+    /**
+     * 
+     */
+    public function update()
+    {
+        $this->_em->flush();
+    }
 }
