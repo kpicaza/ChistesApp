@@ -1,0 +1,6 @@
+{# empty Twig template #}
+
+<h1>Joke Delete Form</h1>
+{{ form_start(form, { method: 'DELETE', action: path('app_jokes_delete_confirm', { 'id': joke.id } ) } ) }}
+{{ form_rest(form) }}
+{{ form_end(form) }}

@@ -75,3 +75,8 @@ fos_user:
     registration:
         confirmation:
             enabled: true
+
+sensio_framework_extra:
+    request:
+        converters: true
+        auto_convert: false

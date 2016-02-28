@@ -9,6 +9,13 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class JokeFormTypeTest extends TypeTestCase
 {
 
+    public function testFormOptions()
+    {
+        $formtype = new JokeFormType();
+                
+        $this->assertEquals('app_joke_form', $formtype->getName());
+    }
+
     public function testSubmitValidData()
     {
         $formData = array(

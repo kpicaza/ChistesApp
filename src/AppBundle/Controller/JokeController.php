@@ -7,6 +7,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use AppBundle\Entity\Joke;
 
 class JokeController extends Controller
 {
@@ -65,13 +67,17 @@ class JokeController extends Controller
     /**
      * 
      * @Route("/jokes/{id}/edit", name="app_jokes_edit")
+     * @ParamConverter("joke", class="AppBundle:Joke", options={
+     *   "repository_method" = "findOneBy", 
+     *   "mapping": {
+     *     "id": "id"
+     *   }, 
+     * })
      * @template("joke/edit.html.twig")
-     * @param integer $id
+     * @param Joke $joke
      */
-    public function editAction($id)
+    public function editAction(Joke $joke)
     {
-        $joke = $this->get('app.joke_repository')->findOneBy(array('id' => $id));
-
         $form = $this->createForm(\AppBundle\Form\Type\JokeFormType::class, $joke);
 
         return [
@@ -83,13 +89,17 @@ class JokeController extends Controller
     /**
      * 
      * @Route("/jokes/{id}/update", name="app_jokes_update")
-     * @template("joke/edit.html.twig")
      * @Method({"POST"})
-     */
-    public function updateAction(Request $request, $id)
+     * @ParamConverter("joke", class="AppBundle:Joke", options={
+     *   "repository_method" = "findOneBy", 
+     *   "mapping": {
+     *     "id": "id"
+     *   }, 
+     * })
+     * @template("joke/edit.html.twig")
+*/
+    public function updateAction(Request $request, Joke $joke)
     {
-        $joke = $this->get('app.joke_repository')->findOneBy(array('id' => $id));
-
         $form = $this->createForm(\AppBundle\Form\Type\JokeFormType::class, $joke);
         $form->handleRequest($request);
 
@@ -109,15 +119,84 @@ class JokeController extends Controller
     /**
      * 
      * @Route("/jokes/{id}", name="app_jokes_show")
+     * @ParamConverter("joke", class="AppBundle:Joke", options={
+     *   "repository_method" = "findOneBy", 
+     *   "mapping": {
+     *     "id": "id"
+     *   }, 
+     * })
      * @template("joke/show.html.twig")
      */
-    public function showAction(Request $request, $id)
+    public function showAction(Request $request, Joke $joke)
     {
-        $joke = $this->get('app.joke_repository')->findOneBy(array('id' => $id));
-
         return [
-              'joke' => $joke
+          'joke' => $joke
         ];
+    }
+
+    /**
+     * 
+     * @Route("/jokes/{id}/delete", name="app_jokes_delete")
+     * @ParamConverter("joke", class="AppBundle:Joke", options={
+     *   "repository_method" = "findOneBy", 
+     *   "mapping": {
+     *     "id": "id"
+     *   }, 
+     * })
+     * @template("joke/delete.html.twig")
+     * @param Joke $joke
+     */
+    public function deleteController(Joke $joke)
+    {
+        return [
+          'joke' => $joke,
+          'form' => $this->createDeleteForm($joke->getId())->createView()
+        ];
+    }
+
+    /**
+     * 
+     * @Route("/jokes/{id}/delete/confirm", name="app_jokes_delete_confirm")
+     * @Method({"DELETE"})
+     * @ParamConverter("joke", class="AppBundle:Joke", options={
+     *   "repository_method" = "findOneBy", 
+     *   "mapping": {
+     *     "id": "id"
+     *   }, 
+     * })
+     * @param Request $request
+     * @param Joke $joke
+     * @return RedirectResponse
+     * @throws \Symfony\Component\Form\Exception\UnexpectedTypeException
+     */
+    public function deleteConfirmController(Request $request, Joke $joke)
+    {
+        $form = $this->createDeleteForm($joke->getId());
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+
+            $this->get('app.joke_repository')->remove($joke);
+
+            return $this->redirect($this->generateUrl('app_jokes'));
+        }
+
+        throw new \Symfony\Component\Form\Exception\InvalidConfigurationException('Invalid delete form submision.');
+    }
+
+    /**
+     * 
+     * @param integer $id
+     * @return Form $form
+     */
+    private function createDeleteForm($id)
+    {
+        return $this->createFormBuilder()
+                ->setAction($this->generateUrl('app_jokes_delete_confirm', array('id' => $id)))
+                ->setMethod('DELETE')
+                ->add('delete', \Symfony\Component\Form\Extension\Core\Type\SubmitType::class, array('label' => 'Delete'))
+                ->getForm()
+        ;
     }
 
 }

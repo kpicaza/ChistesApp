@@ -30,4 +30,14 @@ class JokeGateway extends EntityRepository
     {
         $this->_em->flush();
     }
+    
+    /**
+     * 
+     * @param \AppBundle\Entity\Joke $joke
+     */
+    public function remove(Joke $joke)
+    {
+        $this->_em->remove($joke);
+        $this->_em->flush();
+    }
 }

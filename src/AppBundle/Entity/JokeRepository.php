@@ -14,7 +14,7 @@ class JokeRepository
      * @var \AppBundle\Entity\JokeGateway 
      */
     private $gateway;
-    
+
     /**
      * @var \AppBundle\Entity\JokeFactory 
      */
@@ -83,11 +83,10 @@ class JokeRepository
     public function insert(array $params)
     {
         $joke = Joke::fromArray($params);
-                
+
         $rawJoke = $this->gateway->insert($joke);
-        
+
         return $this->factory->makeOne($rawJoke);
-        
     }
 
     /**
@@ -97,4 +96,14 @@ class JokeRepository
     {
         $this->gateway->update();
     }
+
+    /**
+     * 
+     * @param \AppBundle\Entity\Joke $joke
+     */
+    public function remove(Joke $joke)
+    {
+        $this->gateway->remove($joke);
+    }
+
 }
