@@ -1,0 +1,20 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - nightly
+
+before_script:
+  - mysql -e 'create database app;'  
+  - mysql -e 'create database app_test;'
+  - cp app/config/parameters.yml.travis app/config/parameters.yml
+  - composer install -n --no-interaction
+  - php bin/console doctrine:schema:update --force --env=test
+  - php bin/console doctrine:fixtures:load --env=test -n
+
+script:
+  - mkdir -p build/logs
+  - phpunit --coverage-clover build/logs/clover.xml
+
+after_success:
+  - php vendor/bin/coveralls -v

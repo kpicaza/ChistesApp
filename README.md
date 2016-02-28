@@ -1,11 +1,47 @@
-Symfony Standard Edition
-========================
+Chistes App - Symfony Standard Edition
+======================================
 
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
+[![Build Status](https://travis-ci.org/kpicaza/ChistesApp.svg?branch=master)](https://travis-ci.org/kpicaza/ChistesApp)
+[![Coverage Status](https://coveralls.io/repos/github/kpicaza/ChistesApp/badge.svg?branch=master)](https://coveralls.io/github/kpicaza/ChistesApp?branch=master)
+
+Welcome to the Chistes App - Symfony Standard Edition - a fully-functional Symfony
 application that you can use as the skeleton for your new applications.
+
+In addition it comes whith a sample CRUD bundle made by TDD and repository pattern, as example.
 
 For details on how to download and get started with Symfony, see the
 [Installation][1] chapter of the Symfony Documentation.
+
+To run application foolow installation instructions below.
+
+Insatalation:
+-------------
+
+1. Clone this repository:
+    
+        git clone git@github.com:kpicaza/ChistesApp.git chistesapp
+
+1. Create new database, for example:
+
+        mysql -u root -p
+        create database chistesapp;
+        \q
+
+1. Install dependencies by composer (After instaling dependencies composer will prompt  some  comfiguration params):
+
+        composer install
+
+1. Update database schema and load data fixtures for testing
+
+        php bin/console doctrine:schema:update --force
+        php bin/console doctrine:fixtures:load -n
+        php bin/console doctrine:database:create --env=test
+        php bin/console doctrine:schema:update --force --env=test
+        php bin/console doctrine:fixtures:load -n --env=test
+
+1. Run tests:
+
+        phpunit --coverage-text 
 
 What's inside?
 --------------
